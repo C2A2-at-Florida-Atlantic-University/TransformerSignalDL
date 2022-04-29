@@ -1,6 +1,6 @@
 # TransformerSignalDL
 
-The purpose of this repository is to train a Transformer network for the purposes of wireless signal classification.
+The purpose of this repository is to train a Transformer network for the task of wireless signal classification.
 The dataset is from DeepSig, named RadioML2016, and contains I/Q samples.
 We can train the network either with I/Q data or Spectrogram data.
 
