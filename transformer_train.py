@@ -178,5 +178,27 @@ history = model.fit(X_train,
 end = time.time()
 print(end - start)
 
-# TODO:
-# Currently we don't have a section for testing the model, will need to add that
+# Test the network
+acc={}
+for snr in snrs:
+    # extract classes @ SNR
+    test_SNRs = list(map(lambda x: lbl[x][1], test_idx))
+    print(test_SNRs[:3])
+    test_X_i = X_test[np.where(np.array(test_SNRs)==snr)]
+    test_Y_i = Y_test[np.where(np.array(test_SNRs)==snr)]
+
+    # estimate classes
+    test_Y_i_hat = model.predict(test_X_i)
+    conf = np.zeros([len(classes),len(classes)])
+    confnorm = np.zeros([len(classes),len(classes)])
+    for i in range(0,test_X_i.shape[0]):
+        j = list(test_Y_i[i,:]).index(1)
+        k = int(np.argmax(test_Y_i_hat[i,:]))
+        conf[j,k] = conf[j,k] + 1
+    for i in range(0,len(classes)):
+        confnorm[i,:] = conf[i,:] / np.sum(conf[i,:])
+    cor = np.sum(np.diag(conf))
+    ncor = np.sum(conf) - cor
+    print("Overall Accuracy for SNR = " + str(snr) + ": ", cor / (cor+ncor))
+    acc[snr] = 1.0*cor/(cor+ncor)
+print(acc)
